@@ -1,12 +1,10 @@
 import Link from 'next/link';
-//import axios from 'axios';
-import { useState, useEffect } from 'react';
-//import { useSession } from 'next-auth/client';
+import { useSession, signOut } from 'next-auth/react';
 
 const Header = () => {
-  //const [session] = useSession();
+  const { data: session } = useSession();
   //const [user, setUser] = useState({});
-  const [session, setSession] = useState(false);
+  console.log(session, 'session');
   return (
     <header className="header">
       <div className="header__logo">
@@ -20,14 +18,19 @@ const Header = () => {
         </div>
       ) : (
         <div className="header__actions">
-          <div className="header__actions-user">
-            {/* <span>{session ? user.name : ''}</span> */}
-            <span>User Name</span>
-            <div className="header__image">
-              {/* <img src={session ? user.imageUrl : ''} alt="" /> */}
-              <img src="" alt="" />
-            </div>
-          </div>
+          <button
+            className="nav__item"
+            onClick={() =>
+              signOut({
+                callbackUrl: `/`
+              })
+            }>
+            <Link href="/" passHref>
+              <a className="nav__link">
+                <span>Logout</span>
+              </a>
+            </Link>
+          </button>
         </div>
       )}
     </header>
