@@ -6,19 +6,49 @@ const RegisterForm = () => {
   //const [session] = useSession();
   const registerForm = useRef();
   const [error, setError] = useState();
-  //const [createInfo, setCreateInfo] = useState();
-  //const [formProcessing, setFormProcessing] = useState(false);
   //const router = useRouter();
 
-  const handleSubmit = () => {
-    console.log("handle");
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    const form = new FormData(registerForm.current);
+    const payload = {
+      email: form.get('email'),
+      name: form.get('fullname'),
+      password: form.get('password'),
+      position: form.get('position')
+    };
+
+    if (payload.password !== form.get('confirmpassword')) {
+      setError('Given passwords not match');
+      return;
+    }
+
+    const response = await fetch('/api/users', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      setError("Congratulation you are registered");
+      // await signIn('credentials', {
+      //   redirect: false,
+      //   email: form.get('email'),
+      //   password: form.get('password')
+      // });
+      // router.push('/community');
+    } else {
+      const payload = await response.json();
+      setError(payload.error);
+    }
+  };
   
   return (
-    <div
-      className="form sign">
+    <form action="#" onSubmit={handleSubmit} ref={registerForm} className="form sign">
       <div className="form__header">Create your new developer account</div>
-      <form action="#" onSubmit={handleSubmit} ref={registerForm}>
         {error && <div className="form__error">{error}</div>}
         <div className="form__field">
           <label htmlFor="fullname" className="form__label">
@@ -82,7 +112,6 @@ const RegisterForm = () => {
           Create account
         </button>
       </form>
-    </div>
   );
 };
 

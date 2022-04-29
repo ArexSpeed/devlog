@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Head from 'next/head'
-import LoginForm from '../components/LoginForm'
-import RegisterForm from '../components/RegisterForm';
+import LoginForm from 'components/LoginForm'
+import RegisterForm from 'components/RegisterForm';
 
 export default function Home() {
   const [login, setLogin] = useState(true);
