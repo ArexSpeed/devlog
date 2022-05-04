@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
-//import { signIn, useSession } from 'next-auth/client';
-//import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const RegisterForm = () => {
   //const [session] = useSession();
   const registerForm = useRef();
   const [error, setError] = useState();
-  //const router = useRouter();
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,12 +34,12 @@ const RegisterForm = () => {
 
     if (response.ok) {
       setError("Congratulation you are registered");
-      // await signIn('credentials', {
-      //   redirect: false,
-      //   email: form.get('email'),
-      //   password: form.get('password')
-      // });
-      // router.push('/community');
+      await signIn('credentials', {
+        redirect: false,
+        email: form.get('email'),
+        password: form.get('password')
+      });
+      router.push('/community');
     } else {
       const payload = await response.json();
       setError(payload.error);
